@@ -1,0 +1,8 @@
+Student,Room,Complaint,Category,Priority,Status
+sam,12,wifi problem,WiFi,Low,Resolved
+rani,15,water tap leak,Water,Medium,Pending
+neha,20,fan is not working,Electrical,Medium,Pending
+priya,21,food quality is bad,Food,Low,Pending
+asha,25,electric shock from switch,Electrical,High,Pending
+kavya ,30,wifi is slow,WiFi,Low,Resolved
+test,35,wifi is not working,WiFi,Medium,Pending
