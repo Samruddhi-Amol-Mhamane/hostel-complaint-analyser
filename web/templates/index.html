@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hostel Complaint Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🏠 Hostel Complaint Analyzer</div>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#add">Add Complaint</a>
+        <a href="#complaints">Complaints</a>
+        <a href="#analysis">Analysis</a>
+    </nav>
+</header>
+
+
+<!-- DASHBOARD -->
+
+<section class="hero" id="dashboard">
+
+    <div class="hero-content">
+
+        <p class="small-title">HOSTEL MANAGEMENT SYSTEM</p>
+
+        <h1>
+            Hostel Complaint
+            <span>Analyzer</span>
+        </h1>
+
+        <p>
+            Report hostel problems, track complaints
+            and analyze complaint data easily.
+        </p>
+
+        <a href="#add" class="primary-button">
+            + Add New Complaint
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- STATISTICS -->
+
+<section class="stats-section">
+
+    <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <h2>{{ total }}</h2>
+        <p>Total Complaints</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">⏳</div>
+        <h2>{{ pending }}</h2>
+        <p>Pending</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <h2>{{ resolved }}</h2>
+        <p>Resolved</p>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <h2>{{ categories|length }}</h2>
+        <p>Categories</p>
+    </div>
+
+</section>
+
+
+<!-- ADD COMPLAINT -->
+
+<section id="add" class="section">
+
+    <div class="section-heading">
+
+        <p class="small-title">REPORT A PROBLEM</p>
+
+        <h2>Add a Complaint</h2>
+
+        <p>
+            Fill this form to submit a new hostel complaint.
+        </p>
+
+    </div>
+
+
+    <div class="form-container">
+
+        <form action="/add" method="POST">
+
+            <div class="form-group">
+
+                <label>Student Name</label>
+
+                <input
+                    type="text"
+                    name="student"
+                    placeholder="Enter your name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Room Number</label>
+
+                <input
+                    type="text"
+                    name="room"
+                    placeholder="Enter room number"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Complaint</label>
+
+                <textarea
+                    name="complaint"
+                    rows="5"
+                    placeholder="Describe your complaint..."
+                    required></textarea>
+
+            </div>
+
+
+            <button type="submit" class="primary-button submit-button">
+                Submit Complaint
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- COMPLAINTS -->
+
+<section id="complaints" class="section alternate">
+
+    <div class="section-heading">
+
+        <p class="small-title">COMPLAINT RECORDS</p>
+
+        <h2>All Complaints</h2>
+
+    </div>
+
+
+    <div class="complaints-container">
+
+        {% if complaints %}
+
+            {% for complaint in complaints %}
+
+            <div class="complaint-card">
+
+                <div class="complaint-top">
+
+                    <div>
+
+                        <h3>
+                            {{ complaint["Complaint"] }}
+                        </h3>
+
+                        <p class="student-info">
+                            👤 {{ complaint["Student"] }}
+                            |
+                            🚪 Room {{ complaint["Room"] }}
+                        </p>
+
+                    </div>
+
+
+                    {% if complaint["Status"] == "Resolved" %}
+
+                        <span class="status resolved">
+                            Resolved
+                        </span>
+
+                    {% else %}
+
+                        <span class="status pending">
+                            Pending
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="complaint-details">
+
+                    <span>
+                        🏷️ {{ complaint["Category"] }}
+                    </span>
+
+                    <span>
+                        ⚡ {{ complaint["Priority"] }}
+                    </span>
+
+                </div>
+
+
+                <div class="complaint-actions">
+
+                    <a
+                        href="/update/{{ complaint['Room'] }}"
+                        class="status-button">
+
+                        {% if complaint["Status"] == "Pending" %}
+                            Mark Resolved
+                        {% else %}
+                            Mark Pending
+                        {% endif %}
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+
+                <h3>No complaints found</h3>
+
+                <p>
+                    Add your first complaint above.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- ANALYSIS -->
+
+<section id="analysis" class="section">
+
+    <div class="section-heading">
+
+        <p class="small-title">DATA ANALYSIS</p>
+
+        <h2>Complaint Analysis</h2>
+
+    </div>
+
+
+    <div class="analysis-grid">
+
+
+        <div class="analysis-card">
+
+            <h3>Category-wise Complaints</h3>
+
+            {% for category, count in categories.items() %}
+
+            <div class="analysis-row">
+
+                <span>{{ category }}</span>
+
+                <strong>{{ count }}</strong>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="analysis-card">
+
+            <h3>Priority-wise Complaints</h3>
+
+            {% for priority, count in priorities.items() %}
+
+            <div class="analysis-row">
+
+                <span>{{ priority }}</span>
+
+                <strong>{{ count }}</strong>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <h3>🏠 Hostel Complaint Analyzer</h3>
+
+    <p>
+        Python • Flask • Pandas • CSV • HTML • CSS • JavaScript
+    </p>
+
+</footer>
+
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
