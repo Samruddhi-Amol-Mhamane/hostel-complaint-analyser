@@ -109,7 +109,16 @@ Open the local URL shown in the terminal, usually:
 ```text
 http://127.0.0.1:5000/
 ```
+## 📸 Project Screenshots
 
+### 🏠 Home Page
+![Home Page](home.png)
+
+### 📋 Complaint Management
+![Complaint Management](complaints.png)
+
+### 📊 Analysis & Charts
+![Analysis](analysis.png)
 ## 📊 Example Analysis
 
 The application can provide information such as:
